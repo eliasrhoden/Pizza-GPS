@@ -6,11 +6,8 @@ import java.util.List;
  * Created on 2018-01-07.
  */
 
-public class PizzeriaFinder {
+public interface PizzeriaFinder {
 
-    public List<Pizzeria> getNearByPizzerias(Position position){
-        //TODO
-        return null;
-    }
+    List<Pizzeria> getNearByPizzerias(Position position);
 
 }

@@ -15,7 +15,7 @@ public class PizzaGPS {
         //TODO
     }
 
-    //Returns degrees, 0 deg = straight ahead, 90 deg = Left, -90/270 = Right
+    //Returns degrees, 0 deg = straight ahead, 90 deg = Left, 270 = Right
     public int getBearingToPizzeria(){
         //TODO
         return -1;
