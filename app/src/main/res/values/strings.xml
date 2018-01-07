@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pizza-GPS</string>
+    <string name="find_pizzeria">Hitta närmaste pizzeria</string>
+    <string name="closest_pizzeria">Närmaste pizzeria: </string>
+    <string name="distance">Avstånd</string>
+    <string name="title_activity_needle">NeedleActivity</string>
+</resources>
