@@ -29,6 +29,11 @@ public class Position {
         return false;
     }
 
+    @Override
+    public String toString(){
+        return "[LAT: "+latitude+"; LONG: "+longitude+"]";
+    }
+
     private static boolean closeEnough(double target, double val){
         return (val < (target + errorMargin)) && (val > (target - errorMargin));
     }
