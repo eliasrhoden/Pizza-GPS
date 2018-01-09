@@ -15,14 +15,22 @@ import static org.junit.Assert.*;
 
 public class PizzeriaFinderTest{
     private PizzeriaFinder pFinder;
+    private FakeGoogleAPI fakeAPI;
     private List<Pizzeria> result;
     private List<Pizzeria> expected;
 
     @Before
     public void setup(){
-        pFinder = new PizzeriaFinder(new FakeGoogleAPI());
+        fakeAPI = new FakeGoogleAPI();
+        pFinder = new PizzeriaFinder(fakeAPI);
         result = pFinder.getNearByPizzerias(new Position(1,1));
         expected = FakeGoogleAPI.pizzeriasFromResponse1();
+    }
+
+
+    @Test
+    public void calledAPI(){
+        assertTrue(fakeAPI.called);
     }
 
     @Test

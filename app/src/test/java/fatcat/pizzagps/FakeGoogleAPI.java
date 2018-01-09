@@ -13,6 +13,8 @@ public class FakeGoogleAPI implements GoogleMapAPI {
     * Used for testing purposes
     * */
 
+    public boolean called = false;
+
     @Override
     public String positionSearch(String keyWord, Position pos) {
 
@@ -20,6 +22,7 @@ public class FakeGoogleAPI implements GoogleMapAPI {
         System.out.println("Keyword: "+keyWord);
         System.out.println("Position: "+pos);
 
+        called = true;
         return response1;
     }
 
