@@ -11,7 +11,7 @@ public class PizzaGPS {
     public PizzaGPS(Position pizzeriaPos){
     }
 
-    public void setMyPosition(Position myPos){
+    public void setMyPosition(Position myPos, int myBearing){
         //TODO
     }
 
