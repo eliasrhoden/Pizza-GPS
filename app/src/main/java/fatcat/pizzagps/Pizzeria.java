@@ -8,9 +8,12 @@ import java.util.Date;
 
 public class Pizzeria {
     public String name;
-    public int rating;
+    public double rating;
     public Position pos;
-    public Date closingTime;
+    //public Date closingTime;
+    public boolean openNow;
+    public String id;
+    public String place_id;
 
     public int minutesUntilClosing(){
         //TODO
