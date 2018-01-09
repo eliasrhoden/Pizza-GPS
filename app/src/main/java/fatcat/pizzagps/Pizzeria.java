@@ -1,9 +1,16 @@
 package fatcat.pizzagps;
 
 /**
- * Created by Elias on 2018-01-07.
+ * All properties of intrested regarding a pizzeria.
  */
 
 public class Pizzeria {
-    //TODO
+    public String name;
+    public int rating;
+    public Position pos;
+    public Date closingTime;
+    
+    public int minutesUntilClosing(){
+        //TODO
+    }
 }
