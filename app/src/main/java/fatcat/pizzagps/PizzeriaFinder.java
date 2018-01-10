@@ -1,5 +1,7 @@
 package fatcat.pizzagps;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,8 +110,9 @@ public class PizzeriaFinder {
         }
         try {
             res = openHours.getBoolean("open_now");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            res = false;
         }
         return res;
     }
@@ -132,6 +135,21 @@ public class PizzeriaFinder {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static void test(){
+        //NOT to be used bu JUnit!!!
+
+        PizzeriaFinder finder = new PizzeriaFinder(new RealGoogleMapAPI());
+        Position grabo = new Position(57.83977,12.28821);
+        List<Pizzeria> pizzerias = finder.getNearByPizzerias(grabo);
+        System.out.println("Found pizzerias: ");
+        for(Pizzeria p:pizzerias){
+            Log.i("- ",p.toString());
+        }
+
+
+
     }
 
 }
