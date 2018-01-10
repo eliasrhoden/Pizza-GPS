@@ -19,7 +19,7 @@ public class PizzeriaFinder {
         this.api = api;
     }
 
-    List<Pizzeria> getNearByPizzerias(Position position){
+    public List<Pizzeria> getNearByPizzerias(Position position){
 
         List<Pizzeria> result = new ArrayList<>();
         String rawResponse = api.positionSearch("pizzeria",position);
@@ -34,6 +34,11 @@ public class PizzeriaFinder {
             }
         }
         return result;
+    }
+       
+    public Pizzeria getBetsPizzeria(List<Pizzeria> pizzerias){
+        //TODO
+        return null;
     }
 
     private JSONArray parseJsonArray(String rawResponse) {
