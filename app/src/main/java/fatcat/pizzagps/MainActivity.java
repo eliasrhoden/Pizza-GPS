@@ -21,6 +21,4 @@ public class MainActivity extends AppCompatActivity {
         PizzeriaFinder.test();
         startActivity(needle);
     }
-
-
 }

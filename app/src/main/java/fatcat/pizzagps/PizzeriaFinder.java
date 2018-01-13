@@ -43,6 +43,20 @@ public class PizzeriaFinder {
         return null;
     }
 
+    public Pizzeria getBestPizzeria(Position myPos, List<Pizzeria> pizzerias) throws Exception {
+        //TODO create better algorithm to determine best pizzeria
+        Pizzeria best = null;
+        for(Pizzeria p:pizzerias){
+            if(p.openNow){
+                best = p;
+                break;
+            }
+        }
+        if(best == null)
+            throw new Exception("Didn't found any open pizzerias close by!");
+        return best;
+    }
+
     private JSONArray parseJsonArray(String rawResponse) {
         JSONObject responseAsJson;
         JSONArray array = null;
@@ -106,12 +120,12 @@ public class PizzeriaFinder {
         try {
             openHours = pizzeriaInJSON.getJSONObject("opening_hours");
         } catch (JSONException e) {
-            e.printStackTrace();
         }
+
         try {
             res = openHours.getBoolean("open_now");
         } catch (Exception e) {
-            e.printStackTrace();
+            //If Google don't know the opening hours of this pizzeria, assume its closed.
             res = false;
         }
         return res;

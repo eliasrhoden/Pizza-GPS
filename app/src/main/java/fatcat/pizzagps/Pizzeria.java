@@ -47,7 +47,9 @@ public class Pizzeria {
 
     @Override
     public String toString(){
-        return name;
+        return "Pizzeria: " + name + "\n" +
+                "Pos: " + pos + "\n" +
+                "Open now: "+openNow;
     }
 
 }
