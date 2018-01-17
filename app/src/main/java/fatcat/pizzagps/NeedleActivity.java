@@ -2,6 +2,7 @@ package fatcat.pizzagps;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -35,10 +36,14 @@ public class NeedleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_needle);
 
+
         //Un-comment to start the needle updating
         //needleUpdate.start();
 
         //Start of test-Code
+
+        testGPS();
+
         final Thread imgRot = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -56,6 +61,15 @@ public class NeedleActivity extends AppCompatActivity {
         imgRot.start();
         //End of test-code
     }
+
+
+    private void testGPS(){
+        Log.i("","GPS===================");
+        PhoneGPS gps = new GPSZ(this);
+        Position p = gps.getPhonePosition();
+        Log.i("GPS: ",p.toString());
+    }
+
 
     private void rotateImage(double degrees){
         ImageView img = findViewById(R.id.arrow_view);
