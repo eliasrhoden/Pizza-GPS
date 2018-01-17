@@ -56,7 +56,7 @@ public class GPSZ implements PhoneGPS {
         // Or use LocationManager.GPS_PROVIDER
 
         if(!(allowedToUseGPS()))
-            Log.i("","Reqeust phone location");
+            return new Location("Failed");
 
         return locationManager.getLastKnownLocation(locationProvider);
     }

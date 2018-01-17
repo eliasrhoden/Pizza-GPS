@@ -14,5 +14,33 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.729"
         app:srcCompat="@drawable/arrow" />
+
+    <TextView
+        android:id="@+id/yourPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="34dp" />
+
+    <TextView
+        android:id="@+id/closePizzeria"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="TextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="72dp" />
+
+    <TextView
+        android:id="@+id/PizzeriaPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="107dp" />
 </android.support.constraint.ConstraintLayout>

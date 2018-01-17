@@ -15,7 +15,7 @@ public class NeedleActivity extends AppCompatActivity {
     private Pizzeria bestPizzeria;
 
     public NeedleActivity(){
-        gps = null; //TODO waiting for implementation
+        gps = new GPSZ(this);
         pizzeriaFinder = new PizzeriaFinder(new RealGoogleMapAPI());
         try {
             bestPizzeria = pizzeriaToPointAt();
@@ -36,30 +36,15 @@ public class NeedleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_needle);
 
+        if(gps.allowedToUseGPS()){
+            //needleUpdate.start();
+        }else{
+
+        }
 
         //Un-comment to start the needle updating
-        //needleUpdate.start();
 
-        //Start of test-Code
 
-        testGPS();
-
-        final Thread imgRot = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i = 0;i<360;i+=30){
-                    rotateImage(i);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        //e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        imgRot.start();
-        //End of test-code
     }
 
 
