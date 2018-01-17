@@ -14,4 +14,9 @@ public interface PhoneGPS {
      */
     int getPhoneBearing();
 
+    /**
+     * @return if the app is allowed to use the GPS/position, MUST BE TRUE for the app to work
+     * */
+    boolean allowedToUseGPS();
+
 }

@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Pizza-GPS.iml" filepath="$PROJECT_DIR$/Pizza-GPS.iml" />
-      <module fileurl="file://C:\Users\Nisse\StudioProjects\Pizza-GPS\PizzaGPS.iml" filepath="C:\Users\Nisse\StudioProjects\Pizza-GPS\PizzaGPS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PizzaGPS.iml" filepath="$PROJECT_DIR$/PizzaGPS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Nisse\StudioProjects\Pizza-GPS\app\app.iml" filepath="C:\Users\Nisse\StudioProjects\Pizza-GPS\app\app.iml" />
     </modules>
   </component>
 </project>
