@@ -1,4 +1,4 @@
-package fatcat.pizzagps;
+package fatcat.pizzagps.GPS;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -8,6 +8,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import fatcat.pizzagps.Position;
 
 /**
  * Created by Nisse on 2018-01-16.

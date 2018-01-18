@@ -1,4 +1,6 @@
-package fatcat.pizzagps;
+package fatcat.pizzagps.GPS;
+
+import fatcat.pizzagps.Position;
 
 /**
  * Created on 2018-01-07.

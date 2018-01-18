@@ -8,6 +8,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fatcat.pizzagps.GPS.GPSZ;
+import fatcat.pizzagps.GPS.PhoneGPS;
+import fatcat.pizzagps.GPS.PizzaGPS;
+import fatcat.pizzagps.GoogleMap.RealGoogleMapAPI;
+
 public class NeedleActivity extends AppCompatActivity {
 
     private PizzaGPS pizzaGPS;

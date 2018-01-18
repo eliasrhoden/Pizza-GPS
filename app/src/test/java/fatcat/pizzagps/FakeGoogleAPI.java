@@ -3,6 +3,8 @@ package fatcat.pizzagps;
 import java.util.ArrayList;
 import java.util.List;
 
+import fatcat.pizzagps.GoogleMap.GoogleMapAPI;
+
 /**
  * Created by Elias on 2018-01-08.
  */

@@ -1,4 +1,4 @@
-package fatcat.pizzagps;
+package fatcat.pizzagps.GoogleMap;
 
 import android.util.Log;
 
