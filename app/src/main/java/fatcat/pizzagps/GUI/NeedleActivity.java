@@ -1,4 +1,4 @@
-package fatcat.pizzagps;
+package fatcat.pizzagps.GUI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import fatcat.pizzagps.GPS.GPSZ;
 import fatcat.pizzagps.GPS.PhoneGPS;
 import fatcat.pizzagps.GPS.PizzaGPS;
 import fatcat.pizzagps.GoogleMap.RealGoogleMapAPI;
+import fatcat.pizzagps.Pizzeria;
+import fatcat.pizzagps.PizzeriaFinder;
+import fatcat.pizzagps.Position;
+import fatcat.pizzagps.R;
 
 public class NeedleActivity extends AppCompatActivity {
 
