@@ -1,10 +1,13 @@
-package fatcat.pizzagps;
+package fatcat.pizzagps.GUI;
 
 import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import fatcat.pizzagps.PizzeriaFinder;
+import fatcat.pizzagps.R;
 
 public class MainActivity extends AppCompatActivity {
 
