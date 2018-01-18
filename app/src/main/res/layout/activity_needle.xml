@@ -21,26 +21,29 @@
         android:id="@+id/yourPos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
         android:text="TextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="34dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/closePizzeria"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
+        android:layout_marginTop="19dp"
         android:text="TextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="72dp" />
+        app:layout_constraintTop_toBottomOf="@+id/yourPos" />
 
     <TextView
         android:id="@+id/pizzeriaPos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
         android:text="TextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="107dp" />
+        app:layout_constraintTop_toBottomOf="@+id/closePizzeria" />
 </android.support.constraint.ConstraintLayout>

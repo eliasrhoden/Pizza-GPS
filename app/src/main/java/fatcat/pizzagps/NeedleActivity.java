@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -14,19 +15,8 @@ public class NeedleActivity extends AppCompatActivity {
     private PhoneGPS gps;
     private Pizzeria bestPizzeria;
 
-    public NeedleActivity(){
-        gps = new GPSZ(this);
-        pizzeriaFinder = new PizzeriaFinder(new RealGoogleMapAPI());
-        try {
-            bestPizzeria = pizzeriaToPointAt();
-            pizzaGPS = new PizzaGPS(bestPizzeria.pos);
-        } catch (Exception e) {
-            //TODO Display that no pizzeria was found...
-        }
-    }
 
-    private Pizzeria pizzeriaToPointAt() throws Exception {
-        Position phonePos = gps.getPhonePosition();
+    private Pizzeria pizzeriaToPointAt(Position phonePos) throws Exception {
         List<Pizzeria> pz = pizzeriaFinder.getNearByPizzerias(phonePos);
         return pizzeriaFinder.getBestPizzeria(phonePos,pz);
     }
@@ -36,17 +26,39 @@ public class NeedleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_needle);
 
+        gps = new GPSZ(this);
+        pizzeriaFinder = new PizzeriaFinder(new RealGoogleMapAPI());
+
         if(gps.allowedToUseGPS()){
-            //needleUpdate.start();
+            test1();
         }else{
-
+            //TODO: Promt user to enable position for the app
         }
+    }
 
-        //Un-comment to start the needle updating
+    private void test1() {
+        try {
+            Position phoneP = gps.getPhonePosition();
+            bestPizzeria = pizzeriaToPointAt(phoneP);
+            pizzaGPS = new PizzaGPS(bestPizzeria.pos);
+            writeDebugTextFields(bestPizzeria,phoneP);
+        } catch (Exception e) {
+            //TODO Display that no pizzeria was found...
+            Log.i("","Failed to retrive best pizzeria");
+        }
 
 
     }
 
+    private void writeDebugTextFields(Pizzeria p,Position phoneP){
+        TextView closePizz = findViewById(R.id.closePizzeria);
+        TextView yourPos = findViewById(R.id.yourPos);
+        TextView pizzaPos = findViewById(R.id.pizzeriaPos);
+
+        closePizz.setText("Närmaste pizzeria: "+p.name);
+        yourPos.setText("Din position: "+phoneP.toString());
+        pizzaPos.setText("Pizzerians pos: "+p.pos.toString());
+    }
 
     private void testGPS(){
         Log.i("","GPS===================");
