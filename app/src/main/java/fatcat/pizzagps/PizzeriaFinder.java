@@ -9,6 +9,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import fatcat.pizzagps.GoogleMap.GoogleMapAPI;
+import fatcat.pizzagps.GoogleMap.RealGoogleMapAPI;
+
 /**
  * Created on 2018-01-07.
  */
