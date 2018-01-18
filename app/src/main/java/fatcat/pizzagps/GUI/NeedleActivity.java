@@ -42,6 +42,7 @@ public class NeedleActivity extends AppCompatActivity {
             test1();
         }else{
             //TODO: Promt user to enable position for the app
+            UserMsgBox.showMsgBox_OK("Platsåtkomst ej möjlig","Appen har inte behörig att läsa enhetes position, aktivera behörigheten under \"inställningar\"",this);
         }
     }
 
@@ -68,14 +69,6 @@ public class NeedleActivity extends AppCompatActivity {
         yourPos.setText("Din position: "+phoneP.toString());
         pizzaPos.setText("Pizzerians pos: "+p.pos.toString());
     }
-
-    private void testGPS(){
-        Log.i("","GPS===================");
-        PhoneGPS gps = new GPSZ(this);
-        Position p = gps.getPhonePosition();
-        Log.i("GPS: ",p.toString());
-    }
-
 
     private void rotateImage(double degrees){
         ImageView img = findViewById(R.id.arrow_view);

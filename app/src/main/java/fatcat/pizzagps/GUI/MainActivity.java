@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void findPizzeriaButton(View view){
         Intent needle = new Intent(this,NeedleActivity.class);
-        PizzeriaFinder.test();
         startActivity(needle);
     }
 }

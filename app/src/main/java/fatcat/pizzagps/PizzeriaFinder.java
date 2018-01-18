@@ -41,11 +41,6 @@ public class PizzeriaFinder {
         return result;
     }
        
-    public Pizzeria getBetsPizzeria(List<Pizzeria> pizzerias){
-        //TODO
-        return null;
-    }
-
     public Pizzeria getBestPizzeria(Position myPos, List<Pizzeria> pizzerias) throws Exception {
         //TODO create better algorithm to determine best pizzeria
         Pizzeria best = null;
