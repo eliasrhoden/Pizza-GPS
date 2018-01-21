@@ -24,12 +24,6 @@ public class NeedleActivity extends AppCompatActivity {
     private PhoneGPS gps;
     private Pizzeria bestPizzeria;
 
-
-    private Pizzeria pizzeriaToPointAt(Position phonePos) throws Exception {
-        List<Pizzeria> pz = pizzeriaFinder.getNearByPizzerias(phonePos);
-        return pizzeriaFinder.getBestPizzeria(phonePos,pz);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +33,15 @@ public class NeedleActivity extends AppCompatActivity {
         pizzeriaFinder = new PizzeriaFinder(new RealGoogleMapAPI());
 
         if(gps.allowedToUseGPS()){
-            test1();
+            needleUpdate.start();
         }else{
-            //TODO: Promt user to enable position for the app
             UserMsgBox.showMsgBox_OK("Platsåtkomst ej möjlig","Appen har inte behörig att läsa enhetes position, aktivera behörigheten under \"inställningar\"",this);
         }
+    }
+
+    private Pizzeria pizzeriaToPointAt(Position phonePos) throws Exception {
+        List<Pizzeria> pz = pizzeriaFinder.getNearByPizzerias(phonePos);
+        return pizzeriaFinder.getBestPizzeria(phonePos,pz);
     }
 
     private void test1() {
@@ -55,6 +53,9 @@ public class NeedleActivity extends AppCompatActivity {
         } catch (Exception e) {
             //TODO Display that no pizzeria was found...
             Log.i("","Failed to retrive best pizzeria");
+            TextView closePizz = findViewById(R.id.closePizzeria);
+
+            closePizz.setText("Failed to recive pizzeria");
         }
 
 
@@ -70,34 +71,57 @@ public class NeedleActivity extends AppCompatActivity {
         pizzaPos.setText("Pizzerians pos: "+p.pos.toString());
     }
 
+    private void writeTextLine_1(String txt){
+        TextView closePizz = findViewById(R.id.closePizzeria);
+        closePizz.setText(txt);
+    }
+
+    private void writeTextLine_2(String txt){
+        TextView yourPos = findViewById(R.id.yourPos);
+        yourPos.setText(txt);
+
+    }
+
+    private void writeTextLine_3(String txt){
+        TextView pizzaPos = findViewById(R.id.pizzeriaPos);
+        pizzaPos.setText(txt);
+    }
+
+
     private void rotateImage(double degrees){
         ImageView img = findViewById(R.id.arrow_view);
         float dg = (float) degrees;
         img.setRotation(dg);
     }
 
+
     private Thread needleUpdate = new Thread(new Runnable() {
-        private final int UPDATE_INTERVAL_ms = 800;
+        private final int UPDATE_INTERVAL_ms = 500;
         @Override
         public void run() {
-            updatePizzaGPS();
-            int needleAngle = pizzaGPS.getBearingToPizzeria();
-            rotateImage(needleAngle);
-            try {
-                Thread.sleep(UPDATE_INTERVAL_ms);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true) {
+                update();
+                try {
+                    Thread.sleep(UPDATE_INTERVAL_ms);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.i("Needle", "Lifebeat Thread");
             }
         }
-
-        private void updatePizzaGPS(){
-            Position myPos = gps.getPhonePosition();
-            int phoneBearing = gps.getPhoneBearing();
-            pizzaGPS.setMyPosition(myPos,phoneBearing);
-        }
-
     });
 
+    private void update() {
+        Position myPos = gps.getPhonePosition();
+        writeTextLine_1("My position: "+myPos.toString());
 
+    }
+
+    private void updatePizzaGPS(){
+        Position myPos = gps.getPhonePosition();
+        writeTextLine_1("My position: "+myPos.toString());
+        int phoneBearing = gps.getPhoneBearing();
+        pizzaGPS.setMyPosition(myPos,phoneBearing);
+    }
 
 }
