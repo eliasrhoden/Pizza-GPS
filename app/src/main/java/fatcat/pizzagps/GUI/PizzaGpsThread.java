@@ -51,8 +51,11 @@ public class PizzaGpsThread extends Thread{
         Log.i("BEST PIZZERIA",bestPizzeria.toString());
     }
 
+
+
     @Override
     public void run() {
+
         while(true){
             Message message = new Message();
             Position myPos = phoneGPS.getPhonePosition();
@@ -66,9 +69,7 @@ public class PizzaGpsThread extends Thread{
             message.arg1 = angle;
             message.obj = dist;
             handler.dispatchMessage(message);
-
-            Log.i("THREAD","IM ALIVEEEEEEE");
-
+            
             sleep(UPDATE_INTERVAL_MS);
         }
     }
@@ -97,7 +98,7 @@ public class PizzaGpsThread extends Thread{
             long distance = (long) msg.obj;
 
             needleActivity.rotateImage(angle);
-            Log.i("HANDLER","I TALK TO UI THEAAAAAAD");
+            Log.i("PizGpsThread","Updated needle");
         }
     }
 

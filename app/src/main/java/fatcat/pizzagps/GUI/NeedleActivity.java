@@ -43,7 +43,7 @@ public class NeedleActivity extends AppCompatActivity implements NeedleUI {
                 default:
 
             }
-            
+
             e.printStackTrace();
             Log.i("VAAAAAA","HITTADE DEN INGEN PIZZERIA`????");
         }
