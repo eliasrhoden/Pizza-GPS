@@ -69,7 +69,7 @@ public class PizzaGpsThread extends Thread{
             message.arg1 = angle;
             message.obj = dist;
             handler.dispatchMessage(message);
-            
+
             sleep(UPDATE_INTERVAL_MS);
         }
     }
