@@ -8,6 +8,11 @@ import static org.junit.Assert.*;
 
 /**
  * Created on 2018-02-04.
+ *
+ * Don't work because the Location class is npt mocked....
+ * Donät know how to solve, so gonna manually test this later
+ *
+ *
  */
 public class PizzaGPSTest {
 

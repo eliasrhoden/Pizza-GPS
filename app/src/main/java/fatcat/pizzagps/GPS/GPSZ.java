@@ -23,8 +23,8 @@ public class GPSZ implements PhoneGPS, LocationListener {
     private Context context;
     private Location lastKnownLocation;
     private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
-    private final float MIN_UPDATE_DISTANCE_m = 0;
-    private final long MIN_UPDATE_TIME_ms = 0;
+    private final float MIN_UPDATE_DISTANCE_m = 5;
+    private final long MIN_UPDATE_TIME_ms = 1000;
 
     @SuppressLint("MissingPermission")
     public GPSZ(Context C) {
@@ -39,13 +39,7 @@ public class GPSZ implements PhoneGPS, LocationListener {
         Log.i("GPSZ","Position retrived from GPSZ");
         return new Position(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
     }
-
-    @Override
-    public int getPhoneBearing() {
-        Log.i("GPSZ","Bearing retrived from GPSZ");
-        return Math.round(lastKnownLocation.getBearing());
-    }
-
+    
     @Override
     public boolean allowedToUseGPS() {
         boolean permitted = ActivityCompat.checkSelfPermission(

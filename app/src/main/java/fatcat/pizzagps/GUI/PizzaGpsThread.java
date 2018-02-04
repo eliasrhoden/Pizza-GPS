@@ -6,6 +6,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
+
 import fatcat.pizzagps.GPS.GPSZ;
 import fatcat.pizzagps.GPS.PhoneGPS;
 import fatcat.pizzagps.GPS.PizzaGPS;
@@ -28,13 +30,14 @@ public class PizzaGpsThread extends Thread{
     private PizzeriaFinder pizzeriaFinder;
     private PizzaGPS angleToPizza;
     private final int UPDATE_INTERVAL_MS = 500;
+    private Pizzeria bestPizzeria;
+    private NeedleActivity needleActivity;
 
-    public PizzaGpsThread(Activity needleActivity) throws PizzaException{
+    public PizzaGpsThread(NeedleActivity needleActivity) throws PizzaException{
         Position myPos;
-        Pizzeria bestPizzeria;
-        if(handler == null){
-            handler = new UiHandler(needleActivity);
-        }
+
+        this.needleActivity = needleActivity;
+
         phoneGPS = new GPSZ(needleActivity);
 
         if(!phoneGPS.allowedToUseGPS())
@@ -59,17 +62,21 @@ public class PizzaGpsThread extends Thread{
         while(true){
             Message message = new Message();
             Position myPos = phoneGPS.getPhonePosition();
-            int myBearing = phoneGPS.getPhoneBearing();
+            int myBearing = 0;
 
             angleToPizza.setMyPosition(myPos,myBearing);
 
             int angle = angleToPizza.getBearingToPizzeria();
             long dist = angleToPizza.getDistanceToPizzeria();
 
-            message.arg1 = angle;
-            message.obj = dist;
-            handler.dispatchMessage(message);
+            UpdateUi uu = new UpdateUi();
+            uu.degree = angle;
+            uu.pizzeriaName = bestPizzeria.name;
 
+            needleActivity.runOnUiThread(uu);
+            Log.i("GPS Thread","Updated MyPos");
+            Log.i("GPS Thread",myPos.toString());
+            Log.i("GPS Thread","My bearinf: " + myBearing);
             sleep(UPDATE_INTERVAL_MS);
         }
     }
@@ -82,24 +89,50 @@ public class PizzaGpsThread extends Thread{
         }
     }
 
+
+    public class UpdateUi implements Runnable{
+
+        public int degree;
+        public String pizzeriaName;
+
+        @Override
+        public void run() {
+            needleActivity.writeTextLine_1(pizzeriaName);
+            needleActivity.writeTextLine_2("ANGLE: " + degree);
+            needleActivity.rotateImage(degree);
+        }
+    }
+
     private class UiHandler extends Handler{
 
-        private NeedleUI needleActivity;
+        private WeakReference<NeedleActivity> needleActivity;
+        private int angle;
+        private long distance;
 
-        public UiHandler(Activity needleActivity){
+        public UiHandler(NeedleActivity needleActivity){
             super(Looper.getMainLooper());
-            this.needleActivity = (NeedleUI) needleActivity;
+            this.needleActivity = new WeakReference<NeedleActivity>(needleActivity);
         }
 
         @Override
         public void handleMessage(Message msg){
             //Handles the message from the "Run" function.
-            int angle = msg.arg1;
-            long distance = (long) msg.obj;
+            NeedleActivity needleA = needleActivity.get();
 
-            needleActivity.rotateImage(angle);
+            angle = msg.arg1;
+            distance = (long) msg.obj;
+
+            needleA.writeTextLine_1("HEH");
+            //needleActivity.writeTextLine_2("Angle: " + angle);
+
+            needleA.rotateImage(angle);
             Log.i("PizGpsThread","Updated needle");
         }
+
+        private void update(){
+
+        }
+
     }
 
 }

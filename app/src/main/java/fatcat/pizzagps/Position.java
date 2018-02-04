@@ -25,7 +25,7 @@ public class Position{
         return l1.distanceTo(l2);
     }
 
-    private static Location parseLocation(Position p){
+    public static Location parseLocation(Position p){
         Location loc = new Location("Position Parsed");
         loc.setLongitude(p.longitude);
         loc.setLatitude(p.latitude);

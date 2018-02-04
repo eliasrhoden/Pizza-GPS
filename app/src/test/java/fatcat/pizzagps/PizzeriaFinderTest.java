@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  * Created by Elias on 2018-01-09.
  */
 
-public class PizzeriaFinderTest{
+public class PizzeriaFinderTest {
     private PizzeriaFinder pFinder;
     private FakeGoogleAPI fakeAPI;
     private List<Pizzeria> result;
