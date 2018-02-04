@@ -34,6 +34,7 @@ public class PizzeriaFinder {
             try {
                 Pizzeria pizzeria = parsePizzeria(pizzerias.getJSONObject(i));
                 result.add(pizzeria);
+                //Log.i("PizzeriaFinder",pizzeria.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -41,7 +42,7 @@ public class PizzeriaFinder {
         return result;
     }
        
-    public Pizzeria getBestPizzeria(Position myPos, List<Pizzeria> pizzerias) throws Exception {
+    public Pizzeria getBestPizzeria(Position myPos, List<Pizzeria> pizzerias) throws PizzaException {
         //TODO create better algorithm to determine best pizzeria
         Pizzeria best = null;
         for(Pizzeria p:pizzerias){
@@ -51,8 +52,13 @@ public class PizzeriaFinder {
             }
         }
         if(best == null)
-            throw new Exception("Didn't found any open pizzerias close by!");
+            throw new PizzaException(PizzaException.Error.NO_PIZZERIA_IS_OPEN);
         return best;
+    }
+
+    public Pizzeria getPizzeria(Position myPos)throws PizzaException{
+        List<Pizzeria> piz = getNearByPizzerias(myPos);
+        return getBestPizzeria(myPos,piz);
     }
 
     private JSONArray parseJsonArray(String rawResponse) {
