@@ -15,4 +15,6 @@ public interface PhoneGPS {
      * */
     boolean allowedToUseGPS();
 
+    void stopGPS();
+
 }

@@ -11,14 +11,19 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import fatcat.pizzagps.GPS.GPSZ;
+import fatcat.pizzagps.GPS.PhoneCompass;
+import fatcat.pizzagps.GPS.PhoneGPS;
 import fatcat.pizzagps.PizzaException;
 import fatcat.pizzagps.R;
 
 public class NeedleActivity extends AppCompatActivity implements NeedleUI {
 
-    public final int IMG_OFFSET_DEG = 0;
+    public final int IMG_OFFSET_DEG = +90;
     private static ThreadPoolExecutor threadPool;
     private PizzaGpsThread pizzaThread;
+    private PhoneCompass compass;
+    private PhoneGPS gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +31,11 @@ public class NeedleActivity extends AppCompatActivity implements NeedleUI {
         setContentView(R.layout.activity_needle);
         threadPool = createThreadPool();
 
+        gps = new GPSZ(this);
+        compass = new PhoneCompass(this);
+
         try {
-            pizzaThread = new PizzaGpsThread(this);
+            pizzaThread = new PizzaGpsThread(this, gps, compass);
             threadPool.execute(pizzaThread);
         } catch (PizzaException e) {
 
@@ -47,6 +55,38 @@ public class NeedleActivity extends AppCompatActivity implements NeedleUI {
             e.printStackTrace();
             Log.i("VAAAAAA","HITTADE DEN INGEN PIZZERIA`????");
         }
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        stopGPS();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        stopGPS();
+        threadPool.shutdown();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+    }
+
+    private void stopGPS(){
+        compass.stopCompassUpdate();
+        gps.stopGPS();
+    }
+
+    private void restartGPS(){
 
     }
 

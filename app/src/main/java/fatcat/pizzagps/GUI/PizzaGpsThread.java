@@ -1,16 +1,10 @@
 package fatcat.pizzagps.GUI;
 
-import android.app.Activity;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
-
-import fatcat.pizzagps.GPS.GPSZ;
+import fatcat.pizzagps.GPS.PhoneCompass;
 import fatcat.pizzagps.GPS.PhoneGPS;
-import fatcat.pizzagps.GPS.PizzaGPS;
 import fatcat.pizzagps.GoogleMap.RealGoogleMapAPI;
 import fatcat.pizzagps.PizzaException;
 import fatcat.pizzagps.Pizzeria;
@@ -25,20 +19,21 @@ import fatcat.pizzagps.Position;
 
 public class PizzaGpsThread extends Thread{
 
-    private static Handler handler;
     private PhoneGPS phoneGPS;
     private PizzeriaFinder pizzeriaFinder;
-    private PizzaGPS angleToPizza;
-    private final int UPDATE_INTERVAL_MS = 500;
+    private final int UPDATE_INTERVAL_MS = 1000/24;
     private Pizzeria bestPizzeria;
     private NeedleActivity needleActivity;
+    private PhoneCompass compass;
+    private UpdateUi uu;
 
-    public PizzaGpsThread(NeedleActivity needleActivity) throws PizzaException{
+    public PizzaGpsThread(NeedleActivity needleActivity, PhoneGPS phoneGPS, PhoneCompass compass) throws PizzaException{
         Position myPos;
 
         this.needleActivity = needleActivity;
 
-        phoneGPS = new GPSZ(needleActivity);
+        this.phoneGPS = phoneGPS;
+        this.compass = compass;
 
         if(!phoneGPS.allowedToUseGPS())
             throw new PizzaException(PizzaException.Error.NOT_ALLOWED_TO_USE_GPS);
@@ -49,9 +44,7 @@ public class PizzaGpsThread extends Thread{
 
         bestPizzeria = pizzeriaFinder.getPizzeria(myPos);
 
-
-        angleToPizza = new PizzaGPS(bestPizzeria.pos);
-        Log.i("BEST PIZZERIA",bestPizzeria.toString());
+        uu = new UpdateUi();
     }
 
 
@@ -62,21 +55,14 @@ public class PizzaGpsThread extends Thread{
         while(true){
             Message message = new Message();
             Position myPos = phoneGPS.getPhonePosition();
-            int myBearing = 0;
+            int myBearing = compass.getPhoneBearing();
 
-            angleToPizza.setMyPosition(myPos,myBearing);
+            int angle = myPos.bearingTo(bestPizzeria.pos, myBearing);
 
-            int angle = angleToPizza.getBearingToPizzeria();
-            long dist = angleToPizza.getDistanceToPizzeria();
-
-            UpdateUi uu = new UpdateUi();
             uu.degree = angle;
             uu.pizzeriaName = bestPizzeria.name;
-
+            Log.i("GPS Thread","A "+ angle);
             needleActivity.runOnUiThread(uu);
-            Log.i("GPS Thread","Updated MyPos");
-            Log.i("GPS Thread",myPos.toString());
-            Log.i("GPS Thread","My bearinf: " + myBearing);
             sleep(UPDATE_INTERVAL_MS);
         }
     }
@@ -97,42 +83,15 @@ public class PizzaGpsThread extends Thread{
 
         @Override
         public void run() {
+            String str = "Pizzeria: " + pizzeriaName + "\n" +
+                    "Angle: " + degree;
+
+            Log.i("Update UI",str);
+
             needleActivity.writeTextLine_1(pizzeriaName);
             needleActivity.writeTextLine_2("ANGLE: " + degree);
             needleActivity.rotateImage(degree);
         }
-    }
-
-    private class UiHandler extends Handler{
-
-        private WeakReference<NeedleActivity> needleActivity;
-        private int angle;
-        private long distance;
-
-        public UiHandler(NeedleActivity needleActivity){
-            super(Looper.getMainLooper());
-            this.needleActivity = new WeakReference<NeedleActivity>(needleActivity);
-        }
-
-        @Override
-        public void handleMessage(Message msg){
-            //Handles the message from the "Run" function.
-            NeedleActivity needleA = needleActivity.get();
-
-            angle = msg.arg1;
-            distance = (long) msg.obj;
-
-            needleA.writeTextLine_1("HEH");
-            //needleActivity.writeTextLine_2("Angle: " + angle);
-
-            needleA.rotateImage(angle);
-            Log.i("PizGpsThread","Updated needle");
-        }
-
-        private void update(){
-
-        }
-
     }
 
 }

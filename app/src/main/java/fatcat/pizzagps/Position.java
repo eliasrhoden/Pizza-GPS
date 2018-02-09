@@ -42,6 +42,25 @@ public class Position{
         return false;
     }
 
+
+    //Returns degrees, 0 deg = straight ahead, 90 deg = Left, 270 = Right
+    public int bearingTo(Position other, int myBearing){
+
+        double myX, myY,pX,pY,x ,y;
+        int res = 0;
+        myX = longitude;
+        myY = latitude;
+        pX = other.longitude;
+        pY = other.latitude;
+
+        x = pX - myX;
+        y = pY - myY;
+
+        res =(int) Math.atan(y/x);
+
+        return res - myBearing;
+    }
+
     @Override
     public String toString(){
         return "[LAT: "+latitude+"; LONG: "+longitude+"]";

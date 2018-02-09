@@ -36,10 +36,9 @@ public class GPSZ implements PhoneGPS, LocationListener {
 
     @Override
     public Position getPhonePosition() {
-        Log.i("GPSZ","Position retrived from GPSZ");
         return new Position(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
     }
-    
+
     @Override
     public boolean allowedToUseGPS() {
         boolean permitted = ActivityCompat.checkSelfPermission(
@@ -52,10 +51,13 @@ public class GPSZ implements PhoneGPS, LocationListener {
         return permitted;
     }
 
+    public void stopGPS(){
+        locationManager.removeUpdates(this);
+    }
+
     @Override
     public synchronized void onLocationChanged(Location location) {
         lastKnownLocation = location;
-        Log.i("GPSZ","New location retrived from phone!");
     }
 
     @Override
