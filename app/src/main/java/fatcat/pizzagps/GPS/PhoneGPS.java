@@ -17,4 +17,8 @@ public interface PhoneGPS {
 
     void stopGPS();
 
+    void startGPS();
+
+    boolean positionAvaliable();
+
 }

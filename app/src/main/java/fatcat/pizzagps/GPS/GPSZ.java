@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -23,19 +24,22 @@ public class GPSZ implements PhoneGPS, LocationListener {
     private Context context;
     private Location lastKnownLocation;
     private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
-    private final float MIN_UPDATE_DISTANCE_m = 5;
+    private final float MIN_UPDATE_DISTANCE_m = 20;
     private final long MIN_UPDATE_TIME_ms = 1000;
+    private final float MAX_ACCURACY = 40;
+    private final int MAX_AGE_OF_LOCATION_MIN = 5;
 
     @SuppressLint("MissingPermission")
     public GPSZ(Context C) {
         context = C;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LOCATION_PROVIDER,MIN_UPDATE_TIME_ms,MIN_UPDATE_DISTANCE_m,this);
-        lastKnownLocation = locationManager.getLastKnownLocation(LOCATION_PROVIDER);
+        tryOldPos(locationManager.getLastKnownLocation(LOCATION_PROVIDER));
     }
 
     @Override
     public Position getPhonePosition() {
+        while(lastKnownLocation==null);
         return new Position(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
     }
 
@@ -55,9 +59,33 @@ public class GPSZ implements PhoneGPS, LocationListener {
         locationManager.removeUpdates(this);
     }
 
+    @SuppressLint("MissingPermission")
+    public void startGPS(){
+        locationManager.requestLocationUpdates(LOCATION_PROVIDER,MIN_UPDATE_TIME_ms,MIN_UPDATE_DISTANCE_m,this);
+    }
+
+
     @Override
     public synchronized void onLocationChanged(Location location) {
-        lastKnownLocation = location;
+        tryNewPos(location);
+    }
+
+    private void tryOldPos(Location location){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            long locationAgeNanos =
+                    SystemClock.elapsedRealtimeNanos() - location.getElapsedRealtimeNanos();
+            double locationAgeMinutes =  locationAgeNanos/(Math.pow(10,9)*60);
+            if(locationAgeMinutes<MAX_AGE_OF_LOCATION_MIN){
+                tryNewPos(location);
+            }
+        }
+    }
+
+    private void tryNewPos(Location location){
+        Log.i("GPS","POS ACC: " + location.getAccuracy());
+        if(location.getAccuracy()<MAX_ACCURACY){
+            lastKnownLocation = location;
+        }
     }
 
     @Override
@@ -74,4 +102,9 @@ public class GPSZ implements PhoneGPS, LocationListener {
     public void onProviderDisabled(String s) {
 
     }
+    @Override
+    public boolean positionAvaliable(){
+        return lastKnownLocation != null;
+    }
+
 }

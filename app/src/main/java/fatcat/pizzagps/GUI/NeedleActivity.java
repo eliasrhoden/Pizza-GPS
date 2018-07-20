@@ -29,66 +29,61 @@ public class NeedleActivity extends AppCompatActivity implements NeedleUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_needle);
+
+        startPizzaGps();
+    }
+
+    private void startPizzaGps(){
         threadPool = createThreadPool();
 
         gps = new GPSZ(this);
         compass = new PhoneCompass(this);
 
-        try {
-            pizzaThread = new PizzaGpsThread(this, gps, compass);
-            threadPool.execute(pizzaThread);
-        } catch (PizzaException e) {
-
-            switch(e.error){
-                case FAILED_TO_RETRIEVE_POSITION:
-                    break;
-                case FAILED_TO_RETRIEVE_PIZZERIAS:
-                    break;
-                case NO_PIZZERIA_IS_OPEN:
-                    break;
-                case NOT_ALLOWED_TO_USE_GPS:
-                    break;
-                default:
-
-            }
-
-            e.printStackTrace();
-            Log.i("VAAAAAA","HITTADE DEN INGEN PIZZERIA`????");
-        }
-
+        pizzaThread = new PizzaGpsThread(this, gps, compass);
+        threadPool.execute(pizzaThread);
     }
 
     @Override
     public void onPause(){
         super.onPause();
         stopGPS();
+        Log.i("NeeldeAct","ON PAUSE");
     }
 
     @Override
     public void onStop(){
         super.onStop();
         stopGPS();
-        threadPool.shutdown();
+        Log.i("NeeldeAct","ON STOP");
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        startPizzaGps();
+        Log.i("NeeldeAct","RESUME");
     }
 
     @Override
     public void onRestart(){
         super.onRestart();
+        startPizzaGps();
+        Log.i("NeeldeAct","RESTART");
     }
 
     private void stopGPS(){
         compass.stopCompassUpdate();
         gps.stopGPS();
+        threadPool.shutdownNow();
+        threadPool.shutdown();
+        pizzaThread.kill();
+        pizzaThread.destroy();
+        pizzaThread.suspend();
+        Log.i("NeeldeAct","Stopped Gps");
+        this.finish();
     }
 
-    private void restartGPS(){
-
-    }
 
     public void writeTextLine_1(String txt){
         TextView closePizz = findViewById(R.id.closePizzeria);

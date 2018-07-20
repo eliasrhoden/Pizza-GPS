@@ -18,6 +18,7 @@ public class PhoneCompass {
     private final int REFRESH_RATE_us = 1000;
     private SensorManager sensorManager;
     private CompassSensorListener compassListener;
+    private boolean compasUpdatesActive = false;
 
     public PhoneCompass(Context c){
         Log.i("GGGG","CREATED COMPASS");
@@ -25,6 +26,7 @@ public class PhoneCompass {
         Sensor orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         compassListener = new CompassSensorListener();
         sensorManager.registerListener(compassListener,orientationSensor,REFRESH_RATE_us);
+        compasUpdatesActive = true;
     }
 
     /***
@@ -33,13 +35,20 @@ public class PhoneCompass {
      */
     public int getPhoneBearing(){
         while(lastBearing == -1);
-        System.out.println("RETURNING " + lastBearing);
-        System.out.println(this);
         return lastBearing;
     }
 
     public void stopCompassUpdate(){
         sensorManager.unregisterListener(compassListener);
+        compasUpdatesActive = false;
+    }
+
+    public void startCompasUpdate(){
+        if(!compasUpdatesActive) {
+            Sensor orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+            sensorManager.registerListener(compassListener, orientationSensor, REFRESH_RATE_us);
+        }
+        compasUpdatesActive = true;
     }
 
     class CompassSensorListener implements SensorEventListener{
@@ -51,7 +60,7 @@ public class PhoneCompass {
                 return;
             float rawVal = sensorEvent.values[INDEX_DEGREE_TO_NORTH];
             lastBearing = (int) rawVal;
-            Log.i("GPS","New Bearing: " + lastBearing);
+            //Log.i("GPS","New Bearing: " + lastBearing);
 
         }
 
