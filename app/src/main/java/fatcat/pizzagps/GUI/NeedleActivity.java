@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,8 +30,7 @@ public class NeedleActivity extends AppCompatActivity implements NeedleUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_needle);
-
-        startPizzaGps();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void startPizzaGps(){
@@ -78,19 +78,19 @@ public class NeedleActivity extends AppCompatActivity implements NeedleUI {
         threadPool.shutdownNow();
         threadPool.shutdown();
         pizzaThread.kill();
-        pizzaThread.destroy();
-        pizzaThread.suspend();
+        //pizzaThread.destroy();
+        //pizzaThread.suspend();
         Log.i("NeeldeAct","Stopped Gps");
         this.finish();
     }
 
 
-    public void writeTextLine_1(String txt){
+    public void writeTextLine_2(String txt){
         TextView closePizz = findViewById(R.id.closePizzeria);
         closePizz.setText(txt);
     }
 
-    public void writeTextLine_2(String txt){
+    public void writeTextLine_1(String txt){
         TextView yourPos = findViewById(R.id.yourPos);
         yourPos.setText(txt);
     }

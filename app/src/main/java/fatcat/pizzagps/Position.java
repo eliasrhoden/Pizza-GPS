@@ -61,6 +61,10 @@ public class Position{
         return res - myBearing;
     }
 
+    public double distanceTo(Position other){
+        return distance(this,other);
+    }
+
     @Override
     public String toString(){
         return "[LAT: "+latitude+"; LONG: "+longitude+"]";

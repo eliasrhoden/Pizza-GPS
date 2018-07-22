@@ -24,8 +24,8 @@ public class GPSZ implements PhoneGPS, LocationListener {
     private Context context;
     private Location lastKnownLocation;
     private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
-    private final float MIN_UPDATE_DISTANCE_m = 20;
-    private final long MIN_UPDATE_TIME_ms = 1000;
+    private final float MIN_UPDATE_DISTANCE_m = 5;
+    private final long MIN_UPDATE_TIME_ms = 500;
     private final float MAX_ACCURACY = 40;
     private final int MAX_AGE_OF_LOCATION_MIN = 5;
 
@@ -67,7 +67,10 @@ public class GPSZ implements PhoneGPS, LocationListener {
 
     @Override
     public synchronized void onLocationChanged(Location location) {
-        tryNewPos(location);
+        Log.i("GPS","POS ACC: " + location.getAccuracy());
+        if(location.getAccuracy()<MAX_ACCURACY){
+            lastKnownLocation = location;
+        }
     }
 
     private void tryOldPos(Location location){
@@ -81,7 +84,7 @@ public class GPSZ implements PhoneGPS, LocationListener {
         }
     }
 
-    private void tryNewPos(Location location){
+    private synchronized void tryNewPos(Location location){
         Log.i("GPS","POS ACC: " + location.getAccuracy());
         if(location.getAccuracy()<MAX_ACCURACY){
             lastKnownLocation = location;
@@ -103,7 +106,7 @@ public class GPSZ implements PhoneGPS, LocationListener {
 
     }
     @Override
-    public boolean positionAvaliable(){
+    public synchronized boolean positionAvaliable(){
         return lastKnownLocation != null;
     }
 

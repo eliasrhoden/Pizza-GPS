@@ -25,7 +25,7 @@ public class PizzaGpsThread extends Thread{
     private Pizzeria bestPizzeria;
     private NeedleActivity needleActivity;
     private PhoneCompass compass;
-    private UpdateUi uu;
+    private UpdateUi gui;
     private boolean keepRunning;
 
     public PizzaGpsThread(NeedleActivity needleActivity, PhoneGPS phoneGPS, PhoneCompass compass){
@@ -34,12 +34,14 @@ public class PizzaGpsThread extends Thread{
         this.compass = compass;
 
         keepRunning = true;
-        uu = new UpdateUi();
+        gui = new UpdateUi();
+        gui.update();
     }
 
 
     @Override
     public void run() {
+        Log.i("GPS T","Thread started");
         Position myPos;
         pizzeriaFinder = new PizzeriaFinder(new RealGoogleMapAPI());
 
@@ -48,9 +50,9 @@ public class PizzaGpsThread extends Thread{
         try {
             bestPizzeria = pizzeriaFinder.getPizzeria(myPos);
         } catch (PizzaException e) {
-            uu.txtLine1 = "Kunde ej hitta någon pizzeria i din närhet!";
-            uu.txtLine2 = "";
-            uu.update();
+            gui.txtLine1 = "Kunde ej hitta någon pizzeria i din närhet!";
+            gui.txtLine2 = "";
+            gui.update();
             return;
         }
 
@@ -61,21 +63,24 @@ public class PizzaGpsThread extends Thread{
             int myBearing = compass.getPhoneBearing();
 
             int angle = myPos.bearingTo(bestPizzeria.pos, myBearing);
-
-            uu.degree = angle;
-            uu.txtLine1 = "Närmaste öppna pizzeria: " + bestPizzeria.name;
-            uu.update();
+            double distance = myPos.distanceTo(bestPizzeria.pos);
+            gui.degree = angle;
+            gui.txtLine1 = "Närmaste öppna pizzeria: ";
+            gui.txtLine2 = bestPizzeria.name;
+            gui.txtLine3 = Math.round(distance) + " m";
+            gui.update();
             sleep(UPDATE_INTERVAL_MS);
         }
+        Log.i("GPS T","Thread ended");
     }
 
     private Position findMyPos(){
         int deg = 0;
         while(!(phoneGPS.positionAvaliable())){
-            uu.txtLine1 = "Söker efter telefonens position...";
-            uu.txtLine2 = "";
-            uu.degree = deg;
-            uu.update();
+            gui.txtLine1 = "Söker efter telefonens position...";
+            gui.txtLine2 = "";
+            gui.degree = deg;
+            gui.update();
             deg += 15;
             sleep(800);
         }
@@ -86,7 +91,7 @@ public class PizzaGpsThread extends Thread{
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -97,12 +102,13 @@ public class PizzaGpsThread extends Thread{
     public class UpdateUi implements Runnable{
 
         public int degree;
-        public String txtLine1,txtLine2;
+        public String txtLine1,txtLine2,txtLine3;
 
         @Override
         public void run() {
             needleActivity.writeTextLine_1(txtLine1);
             needleActivity.writeTextLine_2(txtLine2);
+            needleActivity.writeTextLine_3(txtLine3);
             needleActivity.rotateImage(degree);
         }
 
